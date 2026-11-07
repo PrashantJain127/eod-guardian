@@ -1,0 +1,29 @@
+plugins {
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+description = 'EOD Guardian Spring Boot runtime (Spring Web, SSE, JDBC/H2 audit persistence, Actuator)'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':eod-core')
+    runtimeOnly project(':eod-ui')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'com.h2database:h2'
+    // To use PostgreSQL instead of H2: runtimeOnly 'org.postgresql:postgresql' and set SPRING_DATASOURCE_URL
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+springBoot {
+    mainClass = 'com.caixa.eodguardian.spring.EodGuardianApplication'
+}

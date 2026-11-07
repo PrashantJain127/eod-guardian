@@ -1,0 +1,17 @@
+allprojects {
+    group = 'com.caixa.eodguardian'
+    version = '1.0.0'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        toolchain { languageVersion = JavaLanguageVersion.of(21) }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.compilerArgs += ['-parameters', '-Xlint:unchecked']
+    }
+}

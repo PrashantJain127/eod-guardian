@@ -1,0 +1,9 @@
+Load test: 50 concurrent users, 20 s, 15531 requests, 776.6 req/s, 0 errors
+endpoint                  count   p50 ms   p95 ms   p99 ms
+/api/dashboard             3128     52.1    132.5    471.0
+/api/eod/programs          3118     48.2     92.7    117.6
+/api/investigations        3102     48.0     87.6    116.0
+/api/metrics               3090     56.3    151.2    235.9
+/api/patches               3093     50.8    100.2    151.0
+ALL                       15531     51.3    108.4    199.9
+exit 0

@@ -1,0 +1,6 @@
+build/
+.gradle/
+frontend/node_modules/
+data/
+run/
+*.log

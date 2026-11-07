@@ -1,0 +1,9 @@
+description = 'EOD Guardian dashboard (pre-built React bundle served from classpath:/static)'
+
+// Rebuild the React bundle from /frontend (needs Node 18+):  gradle :eod-ui:buildFrontend
+tasks.register('buildFrontend', Exec) {
+    group = 'build'
+    description = 'npm install + vite build into eod-ui/src/main/resources/static'
+    workingDir = rootProject.file('frontend')
+    commandLine 'sh', '-c', 'npm install --no-audit --no-fund && npm run build'
+}

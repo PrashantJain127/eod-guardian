@@ -1,0 +1,19 @@
+-- Append-only, hash-chained audit trail (H2 / PostgreSQL compatible).
+-- Grant the application account INSERT and SELECT only; never UPDATE or DELETE.
+CREATE TABLE IF NOT EXISTS EOD_AUDIT (
+    SEQ              BIGINT       NOT NULL PRIMARY KEY,
+    AUDIT_ID         VARCHAR(20)  NOT NULL UNIQUE,
+    EVENT_TS         TIMESTAMP    NOT NULL,
+    BUSINESS_DATE    DATE,
+    EVENT_TYPE       VARCHAR(60)  NOT NULL,
+    ACTOR            VARCHAR(100) NOT NULL,
+    PROGRAM_ID       VARCHAR(20),
+    PATCH_ID         VARCHAR(20),
+    INVESTIGATION_ID VARCHAR(40),
+    OUTCOME          VARCHAR(100),
+    PREV_HASH        CHAR(64)     NOT NULL,
+    HASH             CHAR(64)     NOT NULL UNIQUE,
+    PAYLOAD          TEXT         NOT NULL
+);
+CREATE INDEX IF NOT EXISTS IX_EOD_AUDIT_PROGRAM ON EOD_AUDIT (PROGRAM_ID);
+CREATE INDEX IF NOT EXISTS IX_EOD_AUDIT_PATCH ON EOD_AUDIT (PATCH_ID);

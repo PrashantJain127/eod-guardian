@@ -1,0 +1,43 @@
+plugins {
+    id 'application'
+}
+
+description = 'EOD Guardian standalone runtime (JDK HttpServer + Server-Sent Events)'
+
+dependencies {
+    implementation project(':eod-core')
+    runtimeOnly project(':eod-ui')
+}
+
+application {
+    mainClass = 'com.caixa.eodguardian.server.EodGuardianServer'
+    applicationDefaultJvmArgs = ['-Xmx512m']
+}
+
+tasks.named('run') {
+    standardInput = System.in
+}
+
+// Concurrent API load test against a running server: gradle :eod-server:loadTest
+tasks.register('loadTest', JavaExec) {
+    group = 'verification'
+    description = 'Concurrent-user API load test (p50/p95/p99, throughput). Server must be running.'
+    dependsOn testClasses
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.caixa.eodguardian.server.LoadTest'
+    args = [project.findProperty('baseUrl') ?: 'http://localhost:8080',
+            project.findProperty('users') ?: '25',
+            project.findProperty('seconds') ?: '20']
+}
+
+tasks.register('fatJar', Jar) {
+    group = 'build'
+    description = 'Self-contained runnable jar'
+    archiveClassifier = 'all'
+    manifest { attributes 'Main-Class': application.mainClass }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+assemble.dependsOn fatJar

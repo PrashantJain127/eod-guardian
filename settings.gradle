@@ -1,0 +1,13 @@
+rootProject.name = 'eod-guardian'
+
+// eod-ui     : built React dashboard packaged as classpath:/static (source in /frontend)
+// eod-core   : dependency-free domain, simulated FLEXCUBE adapters, multi-agent orchestration
+// eod-server : dependency-free runtime (JDK HTTP server + SSE) - runs fully offline
+// eod-spring : Spring Boot runtime (Spring Web + JDBC/H2 audit persistence) on the same core
+include 'eod-ui', 'eod-core', 'eod-server'
+
+// Build without Spring (e.g. on an air-gapped box with no Maven Central access):
+//   gradle build -PcoreOnly
+if (!providers.gradleProperty('coreOnly').isPresent()) {
+    include 'eod-spring'
+}

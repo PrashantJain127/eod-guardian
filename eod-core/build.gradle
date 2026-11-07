@@ -1,0 +1,13 @@
+// Pure Java 21 - no third-party dependencies, so it builds offline.
+description = 'EOD Guardian core: simulated FLEXCUBE, EOD engine, multi-agent orchestration, controls'
+
+// Dependency-free scenario test harness (runs here and in CI without Maven Central).
+// JUnit 5 tests that exercise the same core live in eod-spring.
+tasks.register('scenarioTest', JavaExec) {
+    group = 'verification'
+    description = 'Runs the end-to-end scenario test suite (5 demonstration scenarios + controls)'
+    dependsOn testClasses
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.caixa.eodguardian.ScenarioTestSuite'
+}
+check.dependsOn scenarioTest
